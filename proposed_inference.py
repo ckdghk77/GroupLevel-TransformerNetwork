@@ -69,6 +69,8 @@ elif args.exp_type == 5:
     load_folder = '{}/exp_cifar_prop_{}_{}/'.format('epoch_result',args.data_num, args.seed);
 elif args.exp_type == 6:
     load_folder = '{}/exp_custom_prop_{}_{}/'.format('epoch_result',args.data_num, args.seed);
+elif args.exp_type == 7:
+    load_folder = '{}/exp_custom_heavy_prop_{}_{}/'.format('epoch_result',args.data_num, args.seed);
 
 try :
     encoder_file = os.path.join(load_folder, 'Encoder.pt')
@@ -107,6 +109,10 @@ elif args.exp_type == 6:  # custom
     train_loader, valid_loader, train_data_list, train_label_list, val_data_list, val_label_list = load_data_custom_sequence(
         args.batch_size, train_size=args.data_num, sequence_num=args.sequence_num, seed=args.seed,
         transparent=args.transparent, is_rgb=args.is_rgb);
+elif args.exp_type == 7:  # custom -heavy : same data loader with custom
+    train_loader, valid_loader, train_data_list, train_label_list, val_data_list, val_label_list = load_data_custom_sequence(
+        args.batch_size, train_size=args.data_num, sequence_num=args.sequence_num, seed=args.seed,
+        transparent=args.transparent, is_rgb=args.is_rgb);
 
 off_diag = np.ones([args.sequence_num,args.sequence_num]) - np.eye(args.sequence_num)
 rel_rec = np.array(encode_onehot(np.where(off_diag)[0]), dtype=np.float32)
@@ -138,6 +144,9 @@ elif args.exp_type == 6 and args.is_rgb == False: # custom_gray model
 elif args.exp_type == 6 and args.is_rgb == True : # custom_color model
     Encoder_net = Encoder_graph(-1, 512, 64,args.sequence_num, type='custom_rgb_conv');
     Transformer_net = Transformer(-1, 512, 64, args.sequence_num, type='custom_rgb_conv');
+elif args.exp_type == 7 and args.is_rgb == True:  # custom_heavy_color model
+    Encoder_net = Encoder_graph(-1, 512, 64, args.sequence_num, type='custom_heavy_rgb_conv');
+    Transformer_net = Transformer(-1, 512, 64, args.sequence_num, type='custom_heavy_rgb_conv');
 
 
 Encoder_net.load_state_dict(torch.load(encoder_file));

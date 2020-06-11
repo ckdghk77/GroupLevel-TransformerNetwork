@@ -78,7 +78,7 @@ if args.save_folder:
 
     elif args.exp_type == 6 : # custom_dataset   ==> all image scale to 64 x 64.
         save_epoch_folder = '{}/exp_custom_prop_{}_{}/'.format('epoch_result', args.data_num, args.seed);
-    elif args.exp_type == 6 : # custom_heavy_dataset   ==> all image scale to 64 x 64.
+    elif args.exp_type == 7 : # custom_heavy_dataset   ==> all image scale to 64 x 64.
         save_epoch_folder = '{}/exp_custom_heavy_prop_{}_{}/'.format('epoch_result', args.data_num, args.seed);
 
     try :
