@@ -28,15 +28,17 @@ pip install -r requirements.txt
 * exp-type=6 (Custom data)  (e.g. KDEF, FEI, custom data)
 * exp-type=7 (Custom data-heavy)  (e.g. Pokémon, custom data)
 
-Custom data : You have to put your own data to directory(/dataset/custom).</br>
+* sequence-num must be less than equal to data-num
+* For dat-num=5, sequence-num=5 is recommended.
 
+Custom data : You have to put your own data to directory(/dataset/custom).</br>
 Other data  : Automatically downloaded by torch-vision.
 
 To train the model in the paper, run this command (prepare your own data for "custom option"):
 <pre>
 <code>
-python proposed_train.py --data-num=5 --exp-type=2 --target-class=3 --seed=15 //MNIST experiment
-python proposed_train.py --data-num=5 --exp-type=7 --is-rgb=True --seed=15 //Custom RGB data experiment
+python proposed_train.py --data-num=5 --sequence-num=5 --exp-type=2 --target-class=3 --seed=15 //MNIST experiment
+python proposed_train.py --data-num=5 --sequence-num=5 --exp-type=7 --is-rgb=True --seed=15 //Custom RGB data experiment
 </code>
 </pre>
 
