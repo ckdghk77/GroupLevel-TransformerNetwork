@@ -45,7 +45,7 @@ python proposed_train.py --data-num=5 --exp-type=7 --is-rgb=True --transparent=T
 
 ### Evaluation
 
-To snythesize new data, run this command (parameter must be same to training):
+To synthesize new data, run this command (parameter must be the same as training):
 
 <pre>
 <code>
