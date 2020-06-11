@@ -5,7 +5,7 @@ import argparse
 import datetime
 from modules.modules_GLTN import *
 import random
-
+import math
 
 
 parser = argparse.ArgumentParser()
