@@ -10,7 +10,6 @@ matplotlib.use('Agg')
 parser = argparse.ArgumentParser()
 
 parser.add_argument('--load-folder', type=str, default='./out')
-parser.add_argument('--is-rgb', type=bool, default=False);
 
 args = parser.parse_args()
 
@@ -45,19 +44,19 @@ for src in range(generated.shape[0]) :
                 cur_col = idx % total_row_num;
                 axes[cur_row, cur_col].axis('off')
                 if idx == 0:  # src_img
-                    if args.is_rgb :
+                    if train_x[src, 0].shape[0]==3 :
                         axes[cur_row, cur_col].imshow(np.transpose(train_x[src, 0], [1, 2, 0]));
                     else :
                         axes[cur_row, cur_col].imshow(np.squeeze(train_x[src, 0]),cmap='Greys');
 
 
                 elif idx == generated.shape[1] + 1:
-                    if args.is_rgb:
+                    if train_x[src, tar].shape[0]==3:
                         axes[cur_row, cur_col].imshow(np.transpose(train_x[src, tar], [1, 2, 0]));
                     else :
                         axes[cur_row, cur_col].imshow(np.squeeze(train_x[src, tar]),cmap='Greys');
                 else:
-                    if args.is_rgb:
+                    if generated[src, idx - 1, tar].shape[0]==3:
                         axes[cur_row, cur_col].imshow(
                             np.transpose(generated[src, idx - 1, tar], [1, 2, 0]));
                     else :
