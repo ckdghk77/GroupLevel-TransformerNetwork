@@ -1,20 +1,16 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.cm as cm
-import sys
 import matplotlib
 import argparse
-import matplotlib.patches as patches
-from matplotlib.patches import ArrowStyle
 
 import os
-#matplotlib.use('Agg')
+matplotlib.use('Agg')
 
 parser = argparse.ArgumentParser()
 
 parser.add_argument('--load-folder', type=str, default='./out')
-parser.add_argument('--is-rgb', type=bool, default=True);
+parser.add_argument('--is-rgb', type=bool, default=False);
 
 args = parser.parse_args()
 
@@ -27,6 +23,7 @@ generated = np.load(file_generated);
 train_x = np.load(file_train);
 
 plt.rcParams["figure.figsize"] = (7.85, 7.9);
+fig_count = 0;
 for src in range(generated.shape[0]) :
 
     for src in range(generated.shape[0]):  # src
@@ -67,8 +64,11 @@ for src in range(generated.shape[0]) :
                         axes[cur_row, cur_col].imshow(np.squeeze(generated[src, idx - 1, tar]), cmap='Greys');
 
             plt.axis('off')
-            plt.savefig("result.jpg", format='jpg', dpi=1200)
-            plt.show()
+            #plt.savefig("result.jpg", format='jpg', dpi=1200)
+            plt.savefig(os.path.join(args.load_folder,"result" +str(fig_count)+ ".jpg"), format='jpg')
+            plt.close('all')
+            fig_count+=1;
+            #plt.show()
 
 
 

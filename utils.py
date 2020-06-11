@@ -1,36 +1,21 @@
 
 from torch.utils.data.dataset import TensorDataset
 from torch.utils.data import DataLoader
-from torch.utils.data import dataset
 from torch.utils.data import Sampler
 import torch.nn.functional as F
-from torch.autograd import Variable
-
+import torch.utils.data as data
+import random
 from datas import *
-from sklearn.datasets import make_moons
-from sklearn.datasets import make_swiss_roll
-
-import matplotlib.patches as patches
-from matplotlib.patches import ArrowStyle
-import matplotlib.pyplot as plt
-import matplotlib
 
 
 from torchvision import transforms
-from os.path import join
-import itertools
-import torchvision
+
 import torchvision.datasets.mnist as Mnist
 import torchvision.datasets.cifar as cifar
+import torchvision.datasets.omniglot as omniglot
 
-from scipy.ndimage.interpolation import map_coordinates
-from scipy.ndimage.filters import gaussian_filter
-
-
-import imgaug.augmenters as iaa
-from scipy import ndimage, misc
-from skimage.transform import resize
-from skimage.transform import rotate
+from PIL import Image
+from scipy import ndimage
 
 def my_softmax(input, axis=1):
     trans_input = input.transpose(axis, 0).contiguous()
@@ -394,8 +379,7 @@ def load_data_cifar_sequence(batch_size, train_size = 8, val_size = 10, test_siz
 
 
 def load_data_omniglot_sequence(batch_size, train_size = 8, val_size = 10, test_size=10, sequence_num= 4, target_class=1, seed = 25, mode= 'conv') :
-
-    data = Omniglot(root='./dataset', download=True, background=False, transform=transforms.Compose([lambda x: x.resize((28, 28))]))
+    data = omniglot.Omniglot(root='./dataset', download=True, background=False, transform=transforms.Compose([lambda x: x.resize((28, 28))]))
 
     tot_img_list = list();
     tot_label_list = list();
