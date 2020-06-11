@@ -55,7 +55,7 @@ python proposed_inference.py --data-num=5 --exp-type=2 --target-class=3 --seed=1
 
 ### Plot result
 
-To plot the synthesized sample, run this command:
+To plot the synthesized sample, run this command (It will save every pair-wise interpolation results in ./out):
 
 <pre>
 <code>
