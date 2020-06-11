@@ -31,7 +31,7 @@ pip install -r requirements.txt
 * sequence-num must be less than equal to data-num
 * For dat-num=5, sequence-num=5 is recommended.
 
-Custom data : You have to put your own data to directory(/dataset/custom).</br>
+Custom data : You can put your own data (e.g. 5 images) to directory(/dataset/custom).</br>
 Other data  : Automatically downloaded by torch-vision.
 
 To train the model in the paper, run this command (prepare your own data for "custom option"):
