@@ -34,14 +34,13 @@ parser.add_argument('--graph-sequence', type=int, default=5,
                     help='graph sequence num')
 parser.add_argument('--target-class', type=int, default=8,
                     help='target_class')
-parser.add_argument('--exp-type', type=int, default=4,
+parser.add_argument('--exp-type', type=int, default=7,
                     help='exp-type (e.g 0 for moon , 1 for spiral ,  '
                          '2 for mnist,  3 for omniglot, 4 for fmnist, 5 for cifar'
                          '6 for custom, 7 for custom_heavy)')
 parser.add_argument('--data-num', type=int, default=5,
                     help='data number')
 parser.add_argument('--is-rgb', type=bool, default=True);
-parser.add_argument('--transparent', type=bool, default=False);
 
 ### gray or RGB
 
@@ -121,11 +120,11 @@ elif args.exp_type == 5:  # cifar
 
 elif args.exp_type == 6 : # custom
     train_loader, valid_loader, train_data_list, train_label_list, val_data_list, val_label_list = load_data_custom_sequence(
-        args.batch_size, train_size=args.data_num, sequence_num=args.sequence_num, seed=args.seed, transparent= args.transparent, is_rgb=args.is_rgb);
+        args.batch_size, train_size=args.data_num, sequence_num=args.sequence_num, seed=args.seed, is_rgb=args.is_rgb);
 
 elif args.exp_type == 7 : # custom_heavy : use same dataloader with custom dataset
     train_loader, valid_loader, train_data_list, train_label_list, val_data_list, val_label_list = load_data_custom_sequence(
-        args.batch_size, train_size=args.data_num, sequence_num=args.sequence_num, seed=args.seed, transparent= args.transparent, is_rgb=args.is_rgb);
+        args.batch_size, train_size=args.data_num, sequence_num=args.sequence_num, seed=args.seed,  is_rgb=args.is_rgb);
 
 
 off_diag = np.ones([args.sequence_num,args.sequence_num]) - np.eye(args.sequence_num)

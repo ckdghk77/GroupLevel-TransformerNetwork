@@ -268,7 +268,7 @@ def load_data_fmnist_sequence(batch_size, train_size = 8, val_size = 10, test_si
     return train_data_loader, valid_data_loader, train_x.cpu().numpy(), train_y.cpu().numpy(), val_x.cpu().numpy(), val_y.cpu().numpy();
 
 
-def load_data_custom_sequence(batch_size, train_size = 8, sequence_num= 4, seed = 25, transparent = False, is_rgb=True) :
+def load_data_custom_sequence(batch_size, train_size = 8, sequence_num= 4, seed = 25, is_rgb=True) :
     dir_name = "./dataset/custom/";
 
     custom_files = os.listdir(dir_name);
@@ -289,7 +289,7 @@ def load_data_custom_sequence(batch_size, train_size = 8, sequence_num= 4, seed 
 
         file_name = custom_files[file_idx];
 
-        if transparent == True :
+        if is_rgb == True :
             image_np = np.array(Image.open(dir_name + file_name).convert('RGB').resize((reshape_size_x,reshape_size_y)))/255.0;
         else:
 

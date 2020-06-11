@@ -37,7 +37,6 @@ parser.add_argument('--exp-type', type=int, default=4,
 parser.add_argument('--data-num', type=int, default=5,
                     help='data number')
 parser.add_argument('--is-rgb', type=bool, default=True);
-parser.add_argument('--transparent', type=bool, default=False);
 parser.add_argument('--out-folder', type=str, default='./out')
 
 
@@ -107,12 +106,10 @@ elif args.exp_type == 5:  # cifar
         sequence_num=args.sequence_num, target_class=args.target_class, seed=args.seed);
 elif args.exp_type == 6:  # custom
     train_loader, valid_loader, train_data_list, train_label_list, val_data_list, val_label_list = load_data_custom_sequence(
-        args.batch_size, train_size=args.data_num, sequence_num=args.sequence_num, seed=args.seed,
-        transparent=args.transparent, is_rgb=args.is_rgb);
+        args.batch_size, train_size=args.data_num, sequence_num=args.sequence_num, seed=args.seed, is_rgb=args.is_rgb);
 elif args.exp_type == 7:  # custom -heavy : same data loader with custom
     train_loader, valid_loader, train_data_list, train_label_list, val_data_list, val_label_list = load_data_custom_sequence(
-        args.batch_size, train_size=args.data_num, sequence_num=args.sequence_num, seed=args.seed,
-        transparent=args.transparent, is_rgb=args.is_rgb);
+        args.batch_size, train_size=args.data_num, sequence_num=args.sequence_num, seed=args.seed, is_rgb=args.is_rgb);
 
 off_diag = np.ones([args.sequence_num,args.sequence_num]) - np.eye(args.sequence_num)
 rel_rec = np.array(encode_onehot(np.where(off_diag)[0]), dtype=np.float32)
