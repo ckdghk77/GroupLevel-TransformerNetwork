@@ -38,7 +38,6 @@ To train the model in the paper, run this command (prepare your own data for "cu
 <code>
 python proposed_train.py --data-num=5 --exp-type=2 --target-class=3 --seed=15 //MNIST experiment
 python proposed_train.py --data-num=5 --exp-type=7 --is-rgb=True --seed=15 //Custom RGB data experiment
-
 </code>
 </pre>
 
