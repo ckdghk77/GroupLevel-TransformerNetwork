@@ -189,7 +189,7 @@ rel_full = Variable(rel_full)
 def train(train_data_set) :
 
     recon_train = []
-    kl_train = []
+    init_loss_train = []
 
     Encoder_net.train()
     Transformer_net.train()
@@ -209,8 +209,10 @@ def train(train_data_set) :
         encoder_optimizer.zero_grad()
         transformer_optimizer.zero_grad()
 
+        # Encode a transform parameter
         transform_parameter = Encoder_net(data, rel_rec, rel_send, rel_full, sequence_num = args.sequence_num);
 
+        # Transformation (identical, value, spatial transform applied)
         preds, identical_preds, value_offset, pixel_offset = Transformer_net(data[:,0], rel_rec, rel_send, transform_parameter, iter_num = args.graph_sequence, sequence_num = args.sequence_num);
 
 
@@ -226,15 +228,15 @@ def train(train_data_set) :
         transformer_optimizer.step();
 
         recon_train.append(reconstruction_loss.detach().cpu().numpy());
-        kl_train.append(init_pred_loss.detach().cpu().numpy());
+        init_loss_train.append(init_pred_loss.detach().cpu().numpy());
 
-    return  np.mean(recon_train), np.mean(kl_train)
+    return  np.mean(recon_train), np.mean(init_loss_train)
 
-def val(epoch, best_val_loss, first_visit, t,  recon_train, kl_train, val_data_set) :
+def val(epoch, best_val_loss, first_visit, t,  recon_train, init_loss_train, val_data_set) :
 
 
     recon_val = []
-    kl_val = []
+    init_loss_val = []
 
     Encoder_net.eval()
     Transformer_net.eval()
@@ -258,7 +260,7 @@ def val(epoch, best_val_loss, first_visit, t,  recon_train, kl_train, val_data_s
             total_loss = reconstruction_loss  + init_pred_loss;
 
             recon_val.append(reconstruction_loss.detach().data.cpu().numpy());
-            kl_val.append(init_pred_loss.data.detach().cpu().numpy());
+            init_loss_val.append(init_pred_loss.data.detach().cpu().numpy());
 
             if first_visit == False and epoch == 99:  # basic training finish
                 first_visit = True;
@@ -266,23 +268,17 @@ def val(epoch, best_val_loss, first_visit, t,  recon_train, kl_train, val_data_s
 
     print('Epoch: {:04d}'.format(epoch),
           'recon_train: {:.10f}'.format(np.mean(recon_train)),
-          'kl_train: {:.10f}'.format(np.mean(kl_train)),
+          'init_train: {:.10f}'.format(np.mean(init_loss_train)),
           'recon_val: {:.10f}'.format(np.mean(recon_val)),
-          'kl_val: {:.10f}'.format(np.mean(kl_val)),
+          'init_val: {:.10f}'.format(np.mean(init_loss_val)),
           'time: {:.4f}s'.format(time.time() - t))
 
-    return np.mean(recon_val), np.mean(kl_val)
+    return np.mean(recon_val), np.mean(init_loss_val)
 
 # Train model
 t_total = time.time()
 best_val_loss = np.inf
 best_epoch = 0
-
-recon_train_list = list();
-kl_train_list = list();
-recon_val_list = list();
-kl_val_list = list();
-
 
 for epoch in range(args.epochs):
     train_data_set = train_loader;
@@ -290,13 +286,9 @@ for epoch in range(args.epochs):
 
     first_visit = False;
     t = time.time()
-    recon_train, kl_train = train(train_data_set);
-    recon_val, kl_val = val(epoch, best_val_loss, first_visit,t, recon_train, kl_train, val_data_set);
+    recon_train, init_loss_train = train(train_data_set);
+    recon_val, init_loss_val = val(epoch, best_val_loss, first_visit,t, recon_train, init_loss_train, val_data_set);
 
-    recon_train_list.append(recon_train);
-    kl_train_list.append(kl_train);
-    recon_val_list.append(recon_val);
-    kl_val_list.append(kl_val);
 
 
 if args.save_folder:
