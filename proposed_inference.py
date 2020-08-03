@@ -225,8 +225,9 @@ with torch.no_grad():
     #new_data, new_data_intermet = Decoder_net.generate_with_random(data[:,0], rel_rec, rel_send, edges, iter_num = args.graph_sequence, sequence_num = args.sequence_num,
     #                                                       random_normal=[0.0, 0.05]);
 
-    new_data, value_offset, pixel_offset = Transformer_net.generate_with_interpolation(data[:,0], rel_rec, rel_send, transform_parameter, iter_num = args.graph_sequence, sequence_num = args.sequence_num,
-                                                          interpol_range=[0.1,1.0], gen_num= 23);
+    transform_parameter_list = Encoder_net.generate_with_interpolation(data, rel_rec, rel_send, rel_full, sequence_num=args.sequence_num);
+
+    new_data, value_offset, pixel_offset = Transformer_net.generate_with_interpolation(data[:,0], rel_rec, rel_send, transform_parameter_list, iter_num = args.graph_sequence, sequence_num = args.sequence_num);
 
 
     origin_train_list.append(data.data.cpu().numpy())
