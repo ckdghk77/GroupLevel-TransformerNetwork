@@ -1,11 +1,11 @@
 import torch.nn as nn
-import math
+
 from utils import *
 
 from torch.autograd import Variable
-from modules.layers import SLP, MLP, ResidualBlock
+from modules.layers import SLP, MLP
 from torch_deform_conv.deform_conv import th_batch_map_offsets , th_generate_grid
-from utils import my_softmax
+
 
 _EPS = 1e-10
 
@@ -207,7 +207,10 @@ class Transformer(nn.Module):
             )
 
             self.channel_transformer_conv = nn.ModuleList([nn.Sequential(
-                nn.Conv2d(self.transform_hidden + 1, 8, 1, 1, bias=False),
+                nn.Conv2d(self.transform_hidden + 1, 16, 1, 1, bias=False),
+                nn.LeakyReLU(),
+                nn.Dropout(p=0.2),
+                nn.Conv2d(16, 8, 1, 1, bias=False),
                 nn.LeakyReLU(),
                 nn.Dropout(p=0.2),
                 nn.Conv2d(8, 4, 1, 1, bias=False),
@@ -477,20 +480,17 @@ class Transformer(nn.Module):
 
 
 
-    def generate_with_interpolation(self, inputs, rel_rec, rel_send, rel_type, iter_num, sequence_num, interpol_range=[0.1,1.9], gen_num=10):
+    def generate_with_interpolation(self, inputs, rel_rec, rel_send, transform_parameter_list, iter_num, sequence_num) :
 
-        start_val = interpol_range[0];
-        end_val = interpol_range[1];
 
-        ratios = np.linspace(start_val, end_val, gen_num);
         output_list = list();
         spatial_transformed_list = list();
 
         pixel_offset_list = list();
 
-        for rate in ratios :
+        for transform_parameter in transform_parameter_list :
 
-            output = self.forward(inputs, rel_rec, rel_send, rel_type*rate, iter_num, sequence_num);
+            output = self.forward(inputs, rel_rec, rel_send, transform_parameter, iter_num, sequence_num);
             output_list.append(output[0]);
             spatial_transformed_list.append(output[2])
             pixel_offset_list.append(output[3])
@@ -771,7 +771,23 @@ class Encoder_graph(nn.Module):
 
         return transform_x;
 
-    def forward(self, inputs, rel_rec, rel_send, rel_full, sequence_num=5):
+    def generate_with_interpolation(self, inputs, rel_rec, rel_send, rel_full, sequence_num=5, interpol_range=[0.1,1.0], gen_num= 23) :
+
+        start_val = interpol_range[0];
+        end_val = interpol_range[1];
+
+        ratios = np.linspace(start_val, end_val, gen_num);
+        transform_parameter_list = list();
+
+
+        for rate in ratios:
+            transform_parameter = self.forward(inputs, rel_rec, rel_send, rel_full, sequence_num=sequence_num, rel_rate=rate);
+            transform_parameter_list.append(transform_parameter);
+
+        return transform_parameter_list;
+
+
+    def forward(self, inputs, rel_rec, rel_send, rel_full, sequence_num=5, rel_rate = 1.0):
 
         x = inputs;
 
@@ -814,7 +830,7 @@ class Encoder_graph(nn.Module):
 
         edges = F.softmax(out, -1);
 
-        edges = edges.contiguous().view(edges.size(0), -1);
+        edges = edges.contiguous().view(edges.size(0), -1) * rel_rate;
 
         transform_vector = self.iter_node2node(rel_rec, rel_send, edges, sequence_num);
 
