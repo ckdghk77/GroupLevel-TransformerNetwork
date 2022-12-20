@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/271458199.svg)](https://zenodo.org/badge/latestdoi/271458199)
+
 # GroupLevel-TransformerNetwork
 
 This repository contains the official PyTorch implementation of GL-TN.
@@ -64,5 +66,6 @@ python plot_interpol.py
 </pre>
 
 
+This work was supported by Institute for Information & Communications Technology Planning & Evaluation (IITP) grant funded by the Korean government (MSIT) (No. 2019-0-01371, Development of brain-inspired AI with human-like intelligence
 
 
